@@ -1,5 +1,6 @@
-// import OverlapComponents from "./OverlapComponents";
+import OverlapComponents from "./OverlapComponents";
 import UserListItem from "./UserListItem";
+import Spinner from "./Spinner";
 // import Pagination from "./Pagination";
 import CreateUserModal from "./CreateUserModal";
 import UserInfoModal from "./UserInfoModal";
@@ -14,12 +15,15 @@ export default function UserListTable() {
   const [showInfo, setShowInfo] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     userService
       .getAll()
       .then((result) => setUsers(result))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   function createUserClickHandler() {
@@ -61,7 +65,8 @@ export default function UserListTable() {
   return (
     <>
       <div className="table-wrapper">
-        {/* <OverlapComponents /> */}
+        
+        {isLoading && <Spinner />}
 
         <table className="table">
           <thead>
@@ -200,6 +205,7 @@ export default function UserListTable() {
       <button className="btn-add btn" onClick={createUserClickHandler}>
         Add new user
       </button>
+      {/* <OverlapComponents/> */}
 
       {/* <Pagination /> */}
     </>
